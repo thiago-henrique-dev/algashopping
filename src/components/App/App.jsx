@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import Checkbox from '../../shared/CheckBox/Checkbox'
 import LineChart from '../../shared/LineChart/LineChart'
 import AppContainer from '../AppContainer/AppContainer'
@@ -9,7 +9,20 @@ import productsMock from '../mocks/products.json'
 import { Container, Wrapper } from './App.styles'
 
 function App(){ 
+  const colors = ['#62cbc6', '#00abad', '#00858c', '006073', '#004d61']
+
    const [products, setProducts] = useState(productsMock.products)
+   const [selectedProducts, setSelectedProduct ] = useState([]) 
+
+   useEffect(() => {
+    const newSelectedProducts = products
+    .filter(product => product.checked)
+
+    setSelectedProduct(newSelectedProducts)
+ 
+   }, [products])
+
+
 
    function handleToggle(id, checked, name){
       const newProducts = products.map(product =>
@@ -30,7 +43,6 @@ function App(){
     
    }
 
-   const colors = ['#62cbc6', '#00abad', '#00858c', '006073', '#004d61']
 
     return <Wrapper>
        <Container>
@@ -44,13 +56,16 @@ function App(){
               </ShoppingList>}
               middle={<ShoppingList 
                       title="Sua lista de compras"
-                      products={products}
+                      products={selectedProducts}
                       onToggle={handleToggle}>
                       
               </ShoppingList>}
               right={<div>
-               
-               
+                estatistica
+                <LineChart color={colors[0]} title="saudavel" percentage={80}/>
+                <LineChart color={colors[1]} title="nao tao saudavel" percentage={20}/>
+                <LineChart color={colors[2]} title="limpeza" percentage={35}/>
+                <LineChart color={colors[3]} title="outros" percentage={15}/>
               </div>}
             />
             
