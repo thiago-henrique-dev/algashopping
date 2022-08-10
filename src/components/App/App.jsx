@@ -7,16 +7,17 @@ import ShoppingList from '../ProductsList/ShoppingList'
 import productsMock from '../mocks/products.json'
 
 import { Container, Wrapper } from './App.styles'
+import extractPercentage from '../utils/ExtractPercentage'
 
 function App(){ 
-  const colors = ['#62cbc6', '#00abad', '#00858c', '006073', '#004d61']
+  const colors = ['#62cbc6', '#00abad', '#00858c', '#006073', '#004d61']
 
    const [products, setProducts] = useState(productsMock.products)
    const [selectedProducts, setSelectedProduct ] = useState([]) 
 
    useEffect(() => {
     const newSelectedProducts = products
-    .filter(product => product.checked)
+    .filter(product => product.checked === true)
 
     setSelectedProduct(newSelectedProducts)
  
@@ -62,10 +63,34 @@ function App(){
               </ShoppingList>}
               right={<div>
                 estatistica
-                <LineChart color={colors[0]} title="saudavel" percentage={80}/>
-                <LineChart color={colors[1]} title="nao tao saudavel" percentage={20}/>
-                <LineChart color={colors[2]} title="limpeza" percentage={35}/>
-                <LineChart color={colors[3]} title="outros" percentage={15}/>
+                <LineChart color={colors[0]}
+                           title="saudavel" 
+                           percentage={extractPercentage(
+                              selectedProducts.length,
+                              selectedProducts
+                              .filter(product => product.tags.includes('healthy')).length
+                           )}/>
+                <LineChart color={colors[1]}
+                           title="nao tao saudavel" 
+                          percentage={extractPercentage(
+                          selectedProducts.length,
+                          selectedProducts
+                          .filter(product => product.tags.includes('junk')).length
+                         )}/>
+                <LineChart color={colors[2]} 
+                           title="limpeza" 
+                           percentage={extractPercentage(
+                            selectedProducts.length,
+                            selectedProducts
+                            .filter(product => product.tags.includes('cleaning')).length
+                         )}/>
+                <LineChart color={colors[3]} 
+                           title="outros" 
+                           percentage={extractPercentage(
+                            selectedProducts.length,
+                            selectedProducts
+                            .filter(product => product.tags.includes('others')).length
+                         )}/>
               </div>}
             />
             
